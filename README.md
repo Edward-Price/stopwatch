@@ -6,4 +6,4 @@ Just a simple stopwatch app. Might add some more features:
 
 Screenshot:
 
-![Dashboard](/screenshot.png?raw=true "Screen")
+![Dashboard](/screnshot.png?raw=true "Screen")
