@@ -17,18 +17,36 @@ class ViewController: UIViewController {
     @IBOutlet weak var timeDisplay: UILabel!
     
     var startTime = TimeInterval()
+    var pauseTime = TimeInterval()
     var timer = Timer()
+    var isPaused = false
     
     @IBAction func startPressed(_ sender: Any) {
-        if !timer.isValid{
+        if startButton.titleLabel?.text == "Start"{
             timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+            startButton.setTitle("Pause",for: .normal)
             startTime = Date.timeIntervalSinceReferenceDate
+            isPaused = false
+        }
+        else if startButton.titleLabel?.text == "Pause"{
+            startButton.setTitle("Resume",for: .normal)
+            timer.invalidate()
+            pauseTime = timer.timeInterval
+            isPaused = true
+        }
+        else if startButton.titleLabel?.text == "Resume"{
+            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+            startButton.setTitle("Pause",for: .normal)
+            isPaused = false
         }
     }
     
     @IBAction func stopPressed(_ sender: Any) {
         timer.invalidate()
         timer = Timer()
+        timeDisplay.text = "00:00:00"
+        startButton.setTitle("Start",for: .normal)
+        pauseTime = TimeInterval()
     }
     
     override func viewDidLoad() {
@@ -64,7 +82,7 @@ class ViewController: UIViewController {
         
         let currentTime = NSDate.timeIntervalSinceReferenceDate
         
-        var elapsedTime: TimeInterval = currentTime - startTime
+        var elapsedTime = currentTime - startTime
         
         let minutes = UInt8(elapsedTime / 60.0)
         
