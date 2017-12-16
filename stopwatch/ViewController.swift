@@ -17,37 +17,19 @@ class ViewController: UIViewController {
     @IBOutlet weak var timeDisplay: UILabel!
     
     var startTime = TimeInterval()
-    var resumeTime: TimeInterval = 0
     var timer = Timer()
-    var isPaused = false
     
     @IBAction func startPressed(_ sender: Any) {
-        if startButton.titleLabel?.text == "Start"{
-            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
-            startButton.setTitle("Pause",for: .normal)
-            startTime = Date.timeIntervalSinceReferenceDate
-            resumeTime = 0
-            isPaused = false
-        }
-        else if startButton.titleLabel?.text == "Pause"{
-            startButton.setTitle("Resume",for: .normal)
-            timer.invalidate()
-            isPaused = true
-        }
-        else if startButton.titleLabel?.text == "Resume"{
-            resumeTime = Date.timeIntervalSinceReferenceDate
-            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
-            startButton.setTitle("Pause",for: .normal)
-            isPaused = false
-        }
+        timer.invalidate()
+        timer = Timer()
+        timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+        startTime = Date.timeIntervalSinceReferenceDate
     }
     
     @IBAction func stopPressed(_ sender: Any) {
         timer.invalidate()
         timer = Timer()
-        elapsedTime = 0.0
-        timeDisplay.text = "00:00:00"
-        startButton.setTitle("Start",for: .normal)
+        //timeDisplay.text = "00:00:00"
     }
     
     override func viewDidLoad() {
@@ -79,24 +61,13 @@ class ViewController: UIViewController {
         self.view.layer.insertSublayer(gradientLayer, at: 0)
     }
     
-    var elapsedTime = 0.0
-    var displayedTime = TimeInterval()
-    
     @objc func updateTime() {
         
-//        let currentTime = NSDate.timeIntervalSinceReferenceDate
-//
-//        if resumeTime == 0{
-//            elapsedTime = currentTime - startTime
-//            displayedTime = elapsedTime
-//
-//        }else{
-//            elapsedTime = currentTime - resumeTime + displayedTime
-//            displayedTime = 0
-//        }
+        let currentTime = NSDate.timeIntervalSinceReferenceDate
         
-        elapsedTime += 0.01
-        print(elapsedTime)
+        var elapsedTime = 0.0
+        
+        elapsedTime = currentTime - startTime
         
         let minutes = UInt8(elapsedTime / 60.0)
         elapsedTime -= (TimeInterval(minutes) * 60)
